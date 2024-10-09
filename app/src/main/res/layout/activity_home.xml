@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    tools:context=".HomeActivity">
+
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp">
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/custom_home_edtsearch"
+            android:drawableStart="@drawable/ic_home_search"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:hint="Search Foods"
+            android:inputType="text"
+            android:textColorHint="#676767" />
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF7622"
+        app:menu="@layout/bottom_navigation_menu" />
+
+
+</LinearLayout>
