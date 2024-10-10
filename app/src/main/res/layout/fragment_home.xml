@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <EditText
+        android:id="@+id/edt_search"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/custom_home_edtsearch"
+        android:drawableStart="@drawable/ic_home_search"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Search Foods"
+        android:inputType="text"
+        android:textColorHint="#676767" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_food"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:background="@color/black"
+        android:layout_height="220dp" />
+
+</LinearLayout>
