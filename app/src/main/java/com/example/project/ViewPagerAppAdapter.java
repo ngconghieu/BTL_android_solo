@@ -21,7 +21,7 @@ public class ViewPagerAppAdapter extends FragmentStateAdapter {
             case 2:
                 return new HistoryFragment();
             case 3:
-                return new ProfileFragment();
+                return new AccountFragment();
             default:
                 return new HomeFragment();
         }
