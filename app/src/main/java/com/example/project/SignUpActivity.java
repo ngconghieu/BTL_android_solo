@@ -41,7 +41,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void linkComponent() {
-        edtUsername = findViewById(R.id.edt_username);
         edtEmai = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         edtReTypePassword = findViewById(R.id.edt_retype_password);

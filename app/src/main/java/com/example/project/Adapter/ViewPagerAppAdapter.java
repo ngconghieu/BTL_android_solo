@@ -1,9 +1,14 @@
-package com.example.project;
+package com.example.project.Adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.example.project.AccountFragment;
+import com.example.project.CartFragment;
+import com.example.project.HistoryFragment;
+import com.example.project.HomeFragment;
 
 public class ViewPagerAppAdapter extends FragmentStateAdapter {
     public ViewPagerAppAdapter(@NonNull FragmentActivity fragmentActivity) {
