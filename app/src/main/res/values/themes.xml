@@ -4,7 +4,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     <!-- Customize your light theme here. -->
         <item name="android:windowBackground">#fff</item>
-        <item name="android:forceDarkAllowed">false</item>
 
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
