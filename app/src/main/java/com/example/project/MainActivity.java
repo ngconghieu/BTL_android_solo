@@ -19,12 +19,12 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private BottomNavigationView bottom_nav;
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        checkUser();
 
         viewPager2 = findViewById(R.id.view_pager);
         setUpViewPager();
@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void checkUser() {
+
     }
 
     private void setUpBottomNav() {

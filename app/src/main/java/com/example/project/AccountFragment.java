@@ -1,5 +1,8 @@
 package com.example.project;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +10,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +70,57 @@ public class AccountFragment extends Fragment {
         }
     }
 
+    private Button btnLogout;
+    private FirebaseAuth mAuth;
+    private ImageView imgvAvatar;
+    private TextView tvEmail, tvRole;
+    AlertDialog alertDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        initUI(view);
+        eventListener();
+        setInfoUser();
+        return view;
+    }
+
+    private void setInfoUser() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        String roleUser = user.getDisplayName();
+        tvEmail.setText(user.getEmail());
+        tvRole.setText(roleUser);
+        if (roleUser.equals("admin")) imgvAvatar.setImageResource(R.mipmap.img_admin);
+        else imgvAvatar.setImageResource(R.mipmap.img_user);
+    }
+
+    private void eventListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new androidx.appcompat.app.AlertDialog.Builder(requireActivity())
+                        .setTitle("Do you really want to log out?")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        mAuth.signOut();
+                                        Intent intent = new Intent(requireActivity(), SignInActivity.class);
+                                        startActivity(intent);
+                                        Toast.makeText(requireActivity(), "You are logged out", Toast.LENGTH_SHORT).show();
+                                        getActivity().finishAffinity();
+                                    }
+                                }).setNegativeButton("Cancel",null).show();
+            }
+        });
+    }
+
+    private void initUI(View view) {
+        btnLogout = view.findViewById(R.id.btn_logout);
+        tvEmail = view.findViewById(R.id.tv_email);
+        tvRole = view.findViewById(R.id.tv_user_role);
+        imgvAvatar = view.findViewById(R.id.imgv_avatar);
+        mAuth = FirebaseAuth.getInstance();
     }
 }
