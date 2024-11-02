@@ -2,11 +2,26 @@ package com.example.project;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.example.project.Object.Food;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +70,57 @@ public class HistoryFragment extends Fragment {
         }
     }
 
+    private ImageView imgvTest;
+    private Button btnTest;
+    private TextView tvTest;
+    private DatabaseReference ref;
+    private StorageReference storageRef;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        initUI(view);
+        eventListener();
+        loadData();
+        return view;
+    }
+
+    private void loadData() {
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot data:snapshot.getChildren()){
+                    Food food = data.getValue(Food.class);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i= 0;i<food.getImageFood().size();i++){
+
+                            }
+                        }
+                    },3000);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void eventListener() {
+    }
+
+    private void initUI(View v) {
+        imgvTest = v.findViewById(R.id.imgv_test);
+        tvTest = v.findViewById(R.id.tv_test);
+        btnTest = v.findViewById(R.id.btn_test);
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ref = FirebaseDatabase.getInstance().getReference("foods");
+
     }
 }

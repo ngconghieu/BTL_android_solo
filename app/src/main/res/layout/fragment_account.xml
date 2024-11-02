@@ -5,44 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".AccountFragment">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:background="#bbb"-->
-<!--        android:padding="16dp">-->
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:layout_width="50sp"-->
-<!--            android:layout_height="50sp"-->
-<!--            android:id="@+id/imgv_avatar"-->
-<!--            android:src="@mipmap/img_admin"/>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:layout_marginLeft="16dp">-->
-<!--            <TextView-->
-<!--                android:id="@+id/tv_email"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/app_name"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="20sp"/>-->
-<!--            <TextView-->
-<!--                android:id="@+id/tv_user_role"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/app_name"-->
-<!--                android:textSize="16sp"-->
-<!--                android:textColor="#d9d9d9"/>-->
-
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
@@ -72,91 +37,12 @@
 
 
     </LinearLayout>
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/layout_menu_account"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/custom_signin_mainlayout">
-        <Button
-            android:id="@+id/btn_edit_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_account_address"
-            android:text="Edit Address"
-            android:gravity="left"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-
-            android:paddingLeft="8dp"
-            android:drawableTint="#1b1c1f"
-            android:drawablePadding="10dp"
-            android:background="@color/white"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#bbb"/>
-
-        <Button
-            android:id="@+id/btn_change_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_account_change_password"
-            android:text="Change Password"
-            android:gravity="left"
-            android:paddingTop="15dp"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="8dp"
-            android:drawableTint="#1b1c1f"
-            android:drawablePadding="10dp"
-            android:background="@color/white"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#bbb"/>
-
-        <Button
-            android:id="@+id/btn_management"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_account_management"
-            android:text="Management"
-            android:gravity="left"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:paddingLeft="8dp"
-            android:drawableTint="#1b1c1f"
-            android:drawablePadding="10dp"
-            android:background="@color/white"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#bbb"/>
-
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_account_signout"
-            android:text="Log Out"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:gravity="left"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="8dp"
-            android:drawableTint="#1b1c1f"
-            android:drawablePadding="10dp"
-            android:background="@color/white"/>
+        android:orientation="vertical">
 
 
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

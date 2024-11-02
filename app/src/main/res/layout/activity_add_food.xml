@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddFoodActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="Food name(*)"
+            android:textColor="#32343e"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edt_food_name_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/custom_app_edt"
+            android:padding="14dp"
+            android:textColorHint="#a0a5ba"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="Price"
+            android:textColor="#32343e"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edt_price_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/custom_app_edt"
+            android:padding="14dp"
+            android:textColorHint="#a0a5ba"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="Discount"
+            android:textColor="#32343e"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edt_discount_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/custom_app_edt"
+            android:padding="14dp"
+            android:textColorHint="#a0a5ba"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="Details"
+            android:textColor="#32343e"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edt_details_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/custom_app_edt"
+            android:padding="14dp"
+            android:textColorHint="#a0a5ba"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="Image(*)"
+            android:textColor="#32343e"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_open_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_margin="8dp"
+            android:background="#806B6B"
+            android:padding="10dp"
+            android:text="Open Gallery"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirm_management"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/custom_app_btn"
+        android:padding="5dp"
+        android:text="Confirm"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_image_foods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_confirm_management" />
+
+
+</LinearLayout>

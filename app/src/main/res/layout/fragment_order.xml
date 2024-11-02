@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4CAF50"
+    android:orientation="vertical"
+    android:background="#fff"
     tools:context=".HistoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
+        android:id="@+id/imgv_test"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="centerCrop"/>
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="20sp"
+        android:id="@+id/tv_test"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:background="@drawable/custom_app_btn"
+        android:padding="10dp"
+        android:id="@+id/btn_test"/>
+
+
+</LinearLayout>
