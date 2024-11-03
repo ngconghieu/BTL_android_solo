@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -45,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btnSignup;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,15 +129,28 @@ public class SignUpActivity extends AppCompatActivity {
                                     if(userCode.toLowerCase().equals("admin")) {
                                         UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName("admin").build();
-                                        user.updateProfile(profile);
+                                        user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    pushUserIntoDatabase(user);
+                                                }
+                                            }
+                                        });
                                         finish();
                                     }else{
                                         UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName("customer").build();
-                                        user.updateProfile(profile);
+                                        user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    pushUserIntoDatabase(user);
+                                                }
+                                            }
+                                        });
                                         finish();
                                     }
-                                    setUser();
                                     progressDialog.dismiss();
                                 }
                             });
@@ -153,8 +168,10 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void setUser() {
-        //...
+    private void pushUserIntoDatabase(FirebaseUser user) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+        User mUser = new User(user.getEmail(),user.getDisplayName());
+        ref.child(user.getUid()).setValue(mUser);
     }
 
     private void initUI() {
@@ -165,6 +182,7 @@ public class SignUpActivity extends AppCompatActivity {
         imgvHideIcon = findViewById(R.id.imgv_hide_icon);
         imgvHideIcon1 = findViewById(R.id.imgv_hide_icon1);
         btnSignup = findViewById(R.id.btn_signup);
+        database = FirebaseDatabase.getInstance();
         progressDialog = new ProgressDialog(this);
 
 

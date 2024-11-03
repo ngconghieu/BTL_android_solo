@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="#f0eded">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgv_food_management"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_account_management_food_management"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_food_name_management"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Food name"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_discount_management"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="discount"
+                    android:textColor="#999"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/tv_price_management"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price"
+                    android:textSize="16sp"
+                    android:textColor="#ff7622"/>
+            </LinearLayout>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+
+                    android:layout_margin="10dp"
+
+                    android:src="@drawable/ic_management_trash_bin"
+                    android:id="@+id/imgv_delete_food_management"/>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_details_management"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_marginTop="10dp"
+            android:textColor="#8A8FA2"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

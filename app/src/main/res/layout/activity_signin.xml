@@ -7,11 +7,16 @@
     android:layout_height="match_parent"
     android:background="@mipmap/log_in"
     tools:context=".SignInActivity">
+
     <FrameLayout
-        android:id="@+id/fragment_forgot_password"
+        android:id="@+id/layout_forgot"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/custom_app_btn"
-        android:layout_height="match_parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="409dp"

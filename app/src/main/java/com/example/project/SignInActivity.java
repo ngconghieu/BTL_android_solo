@@ -38,7 +38,8 @@ public class SignInActivity extends AppCompatActivity {
     private ImageView imgvHideIcon;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
-    private FrameLayout fragmentContainer;
+    private FrameLayout layoutForgot;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +107,23 @@ public class SignInActivity extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ForgotPasswordFragment forgotPassword = new ForgotPasswordFragment();
-                forgotPassword.show(getSupportFragmentManager(),"test frag");
+                //tao alertDialog send email
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+
+                View dialogView = getLayoutInflater()
+                        .inflate(R.layout.fragment_forgot_password,null);
+                builder.setView(dialogView);
+                alertDialog = builder.create();
+                alertDialog.show();
+                //check btn send email
+                EditText edtSendEmail = dialogView.findViewById(R.id.edt_send_email);
+                Button btnSendEmail = dialogView.findViewById(R.id.btn_send_email);
+                btnSendEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        sendEmailForgotPassword(edtSendEmail);
+                    }
+                });
             }
         });
 
@@ -120,6 +136,41 @@ public class SignInActivity extends AppCompatActivity {
         });
 
     }
+    //xu ly khi click on btnSendEmail
+    private void sendEmailForgotPassword(EditText edtSendEmail) {
+        String SendEmail = edtSendEmail.getText().toString();
+
+        if(InputValidate.isValidEmail(SendEmail)){
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.sendPasswordResetEmail(SendEmail)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                progressDialog.setMessage("An email reset password was just send to "+SendEmail);
+                                progressDialog.show();
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressDialog.dismiss();
+                                        alertDialog.dismiss();
+                                        Toast.makeText(SignInActivity.this, "Sent Email", Toast.LENGTH_SHORT).show();
+                                    }
+                                },5000);
+
+//                                Toast.makeText(SignInActivity.this,
+//                                        "An email reset password was just send to "+SendEmail, Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(SignInActivity.this, "Email doesn't exist", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+        else{
+            edtSendEmail.setError("Invalid Email");
+        }
+    }
 
     private void initUI() {
         tvForgotPassword = findViewById(R.id.tv_forgot_password);
@@ -128,6 +179,7 @@ public class SignInActivity extends AppCompatActivity {
         btnSignin = findViewById(R.id.btn_signin);
         tvSignup = findViewById(R.id.tv_signup);
         imgvHideIcon = findViewById(R.id.imgv_hide_icon);
+        layoutForgot = findViewById(R.id.layout_forgot);
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(SignInActivity.this);
 

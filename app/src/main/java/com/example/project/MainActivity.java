@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        checkUser();
 
         viewPager2 = findViewById(R.id.view_pager);
         setUpViewPager();
@@ -39,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUser() {
-
-    }
 
     private void setUpBottomNav() {
         bottom_nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

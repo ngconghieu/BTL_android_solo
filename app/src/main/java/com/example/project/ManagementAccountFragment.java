@@ -1,37 +1,30 @@
 package com.example.project;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.project.Object.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
+ * Use the {@link ManagementAccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountFragment extends Fragment {
+public class ManagementAccountFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,7 +35,7 @@ public class AccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AccountFragment() {
+    public ManagementAccountFragment() {
         // Required empty public constructor
     }
 
@@ -52,11 +45,11 @@ public class AccountFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment ManagementAccountFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
+    public static ManagementAccountFragment newInstance(String param1, String param2) {
+        ManagementAccountFragment fragment = new ManagementAccountFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,39 +66,37 @@ public class AccountFragment extends Fragment {
         }
     }
 
-
-    private ImageView imgvAvatar;
-    private TextView tvEmail, tvRole;
-    FirebaseAuth mAuth;
-
+    private Button btnFoodManagement, btnRevenue;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_management_account, container, false);
         initUI(view);
-        setInfoUser();
-        MenuAccountFragment maf = new MenuAccountFragment();
-        getParentFragmentManager().beginTransaction()
-            .replace(R.id.layout_menu_account, maf)
-            .commit();
-
+        eventListener();
         return view;
     }
 
-    private void initUI(View view) {
-        tvEmail = view.findViewById(R.id.tv_email);
-        tvRole = view.findViewById(R.id.tv_user_role);
-        imgvAvatar = view.findViewById(R.id.imgv_avatar);
-        mAuth = FirebaseAuth.getInstance();
+    private void eventListener() {
+        btnFoodManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(requireActivity(), FoodManagementActivity.class);
+                startActivity(i);
+            }
+        });
+        btnRevenue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
-    private void setInfoUser() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        String roleUser = user.getDisplayName();
-        tvEmail.setText(user.getEmail());
-        tvRole.setText(roleUser);
-        if (roleUser.equals("admin")) imgvAvatar.setImageResource(R.mipmap.img_admin);
-        else imgvAvatar.setImageResource(R.mipmap.img_user);
+    private void initUI(View v) {
+        btnFoodManagement = v.findViewById(R.id.btn_food_management);
+        btnRevenue = v.findViewById(R.id.btn_revenue);
     }
+
+
 }
