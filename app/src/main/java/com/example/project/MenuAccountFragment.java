@@ -105,30 +105,30 @@ public class MenuAccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ChangePasswordAccountFragment cpf = new ChangePasswordAccountFragment();
-//                getParentFragmentManager().beginTransaction()
-//                        .add(R.id.layout_menu_account,cpf)
-//                        .addToBackStack(null)
-//                        .commit();
+                getParentFragmentManager().beginTransaction()
+                        .add(R.id.layout_menu_account,cpf)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         btnAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AddressAccountFragment aaf = new AddressAccountFragment();
-//                getParentFragmentManager().beginTransaction()
-//                        .add(R.id.layout_menu_account,aaf)
-//                        .addToBackStack(null)
-//                        .commit();
+                getParentFragmentManager().beginTransaction()
+                        .add(R.id.layout_menu_account,aaf)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         btnManagement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ManagementAccountFragment maf = new ManagementAccountFragment();
-//                getParentFragmentManager().beginTransaction()
-//                        .add(R.id.layout_menu_account,maf)
-//                        .addToBackStack(null)
-//                        .commit();
+                getParentFragmentManager().beginTransaction()
+                        .add(R.id.layout_menu_account,maf)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
