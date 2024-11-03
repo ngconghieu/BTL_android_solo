@@ -117,7 +117,6 @@ public class AccountFragment extends Fragment {
     }
 
     private void initUI(View view) {
-        btnLogout = view.findViewById(R.id.btn_logout);
         tvEmail = view.findViewById(R.id.tv_email);
         tvRole = view.findViewById(R.id.tv_user_role);
         imgvAvatar = view.findViewById(R.id.imgv_avatar);
