@@ -104,6 +104,7 @@ public class AddressAccountFragment extends Fragment {
                     FirebaseUser user = mAuth.getCurrentUser();
                     Address mAddress = new Address(userName, address, phoneNumber);
                     ref.child(user.getUid()).child("address").setValue(mAddress);
+                    Toast.makeText(requireContext(), "Address saved", Toast.LENGTH_SHORT).show();
                     //close fragment
                     getParentFragmentManager().beginTransaction()
                             .remove(AddressAccountFragment.this)

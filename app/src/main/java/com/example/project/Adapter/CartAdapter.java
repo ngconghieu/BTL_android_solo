@@ -14,9 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.project.Object.Cart;
+import com.example.project.Object.Food;
 import com.example.project.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -24,7 +30,7 @@ import java.util.Locale;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ItemViewHolder>{
     List<Cart> mList;
-    private void setData(List<Cart> List){
+    public void setData(List<Cart> List){
         mList = List;
         notifyDataSetChanged();
     }
@@ -36,28 +42,41 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ItemViewHolder
         return new ItemViewHolder(view);
     }
 
-    int number, price;
-    int subPrice, priceOrigin;
-    String img;
+    DatabaseReference ref;
+    FirebaseUser user;
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Cart cart = mList.get(position);
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-//        number = cart.getQuantity();
-//        price = cart.getSubPrice()
-//        subPrice = price*number;
-//        img = cart.getFood().getImageFood().get(0);
-//        priceOrigin = price;
-//
-//        holder.tvName.setText(cart.getFood().getFoodName());
-//        NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
-//        holder.btnNumberCart.setText(String.valueOf(number));
-//        holder.tvPrice.setText(numberFormat.format(subPrice)+" VND");
-//
-//        Glide.with(holder.itemView.getContext())
-//                .load(img)
-//                .into(holder.imgvCart);
+        int number = cart.getQuantity();
+        String foodName = cart.getFoodName();
+        int priceOrigin = cart.getSubPrice()/number;
+        int subPrice = priceOrigin*number;
 
+        NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
+
+        //lay image
+        ref = FirebaseDatabase.getInstance().getReference("foods").child(foodName);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Food food = snapshot.getValue(Food.class);
+                String img = food.getImageFood().get(0);
+                Glide.with(holder.itemView.getContext())
+                        .load(img)
+                        .into(holder.imgvCart);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        //gan text
+        holder.tvPrice.setText(numberFormat.format(subPrice) + " VND");
+        holder.tvName.setText(foodName);
+        holder.btnNumberCart.setText(String.valueOf(number));
+
+        //eventListener
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,33 +92,44 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ItemViewHolder
                                     notifyItemRemoved(pos);
                                     notifyItemRangeChanged(pos,mList.size());
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cart");
-
+                                    ref.child(user.getUid()).child(foodName).removeValue();
                                 }
-                            });
+                            }).setNegativeButton("No",null).show();
                 }
             }
         });
         holder.btnSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (number > 1) {
-                    number -= 1;
-                    subPrice = priceOrigin *number;
-                    holder.btnNumberCart.setText(String.valueOf(number));
-//                    holder.tvPrice.setText(numberFormat.format(subPrice) + " VND");
+                int pos = holder.getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && cart.getQuantity() > 1) {
+                    cart.setQuantity(cart.getQuantity() - 1);
+                    cart.setSubPrice(priceOrigin * cart.getQuantity());
+                    holder.btnNumberCart.setText(String.valueOf(cart.getQuantity()));
+                    holder.tvPrice.setText(numberFormat.format(cart.getSubPrice()) + " VND");
+                    updateFirebase(foodName, cart.getQuantity(), cart.getSubPrice());
                 }
             }
         });
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number += 1;
-                subPrice = priceOrigin *number;
-                holder.btnNumberCart.setText(String.valueOf(number));
-//                holder.tvPrice.setText(numberFormat.format(subPrice)+ " VND");
+                int pos = holder.getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    cart.setQuantity(cart.getQuantity() + 1);
+                    cart.setSubPrice(priceOrigin * cart.getQuantity());
+                    holder.btnNumberCart.setText(String.valueOf(cart.getQuantity()));
+                    holder.tvPrice.setText(numberFormat.format(cart.getSubPrice()) + " VND");
+                    updateFirebase(foodName, cart.getQuantity(), cart.getSubPrice());
+                }
             }
         });
+    }
 
+    private void updateFirebase(String foodName, int quantity, int subPrice) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cart");
+        ref.child(user.getUid()).child(foodName).child("quantity").setValue(quantity);
+        ref.child(user.getUid()).child(foodName).child("subPrice").setValue(subPrice);
     }
 
     @Override

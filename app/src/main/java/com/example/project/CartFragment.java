@@ -10,11 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.project.Adapter.CartAdapter;
+import com.example.project.Object.Address;
 import com.example.project.Object.Cart;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,8 +32,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,11 +87,16 @@ public class CartFragment extends Fragment {
         }
     }
 
+    BottomSheetDialog bottomSheetDialog;
     private RecyclerView rcvCart;
     private Button btn_order;
     private TextView tvPrice;
     private CartAdapter adapter;
-    private String subPrice, imgCart, quantity, name, totalPrice;
+    DatabaseReference ref;
+    FirebaseUser user;
+    private int totalPrice;
+    NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,21 +108,27 @@ public class CartFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
+
     private void loadData() {
         List<Cart> list = new ArrayList<>();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cart");
+        ref = FirebaseDatabase.getInstance().getReference("cart").child(user.getUid());
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()){
-                    for(DataSnapshot data1:data.getChildren()){
-                        String a = data1.child("foodName").getValue().toString();
-                        int b = data1.child("quantity").getValue(Integer.class),
-                            c = data1.child("subTotal").getValue(Integer.class);
-                        Cart cart = new Cart();
-
-                    }
+                list.clear();
+                totalPrice = 0;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Cart cart = data.getValue(Cart.class);
+                    list.add(cart);
+                    totalPrice += cart.getSubPrice();
                 }
+                adapter.setData(list);
+                tvPrice.setText(numberFormat.format(totalPrice) + " VND");
             }
 
             @Override
@@ -114,16 +139,153 @@ public class CartFragment extends Fragment {
     }
 
     private void eventListener() {
+        btn_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View vi = getLayoutInflater().inflate(R.layout.layout_bottomsheet_order, null);
+                bottomSheetDialog = new BottomSheetDialog(requireContext());
+                bottomSheetDialog.setContentView(vi);
+                bottomSheetDialog.show();
+                sheetZone(vi);
+            }
+        });
     }
 
     private void initUI(View v) {
+        btn_order = v.findViewById(R.id.btn_order);
+        NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
         adapter = new CartAdapter();
         rcvCart = v.findViewById(R.id.rcv_cart);
         btn_order = v.findViewById(R.id.btn_order);
-        tvPrice = v.findViewById(R.id.tv_price_cart);
+        tvPrice = v.findViewById(R.id.tv_total_price_cart);
         rcvCart.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        //rcvCart.setAdapter(adapter);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        rcvCart.setAdapter(adapter);
+    }
 
+
+    //sheet zone
+    private TextView tvPriceSheet, tvaddress, tvCartSheet;
+    private EditText edtFullname, edtPhoneNumber, edtAddress;
+    private Button btnCancel, btnOrder;
+    private Spinner spnPayment, spnOrder;
+    DatabaseReference refe;
+    List<Cart> cartList;
+    String currentDateTime;
+    String fullName, address, payment, orderingMethod, phoneNumber;
+
+    private void sheetZone(View v) {
+        cartList = new ArrayList<>();
+        tvaddress = v.findViewById(R.id.tvaddress);
+        tvCartSheet = v.findViewById(R.id.tv_details_cart_sheet);
+        tvPriceSheet = v.findViewById(R.id.tv_price_order_sheet);
+        edtFullname = v.findViewById(R.id.edt_fullname_order_sheet);
+        edtPhoneNumber = v.findViewById(R.id.edt_phone_number_order_sheet);
+        edtAddress = v.findViewById(R.id.edt_address_order_sheet);
+        btnOrder = v.findViewById(R.id.btn_order_sheet);
+        btnCancel = v.findViewById(R.id.btn_cancel_order_sheet);
+        spnPayment = v.findViewById(R.id.spn_payment_order_sheet);
+        spnOrder = v.findViewById(R.id.spn_order_method_sheet);
+
+        //dateTime
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        currentDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+
+        loadSheetData();
+        eventListenerSheet();
+    }
+
+    private void loadSheetData() {
+        //payment
+        ArrayAdapter<CharSequence> adap = ArrayAdapter.createFromResource(
+                requireContext(), R.array.payment_method, android.R.layout.simple_spinner_dropdown_item);
+        spnPayment.setAdapter(adap);
+        //ordering
+        ArrayAdapter<CharSequence> adap1 = ArrayAdapter.createFromResource(
+                requireContext(), R.array.ordering_method, android.R.layout.simple_spinner_dropdown_item);
+        spnOrder.setAdapter(adap1);
+
+        // Load address if avail
+        DatabaseReference addressRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+        addressRef.child("address").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot!=null) {
+                    Address address = snapshot.getValue(Address.class);
+                    if (address != null) {
+                        edtFullname.setText(address.getUserName());
+                        edtPhoneNumber.setText(address.getPhoneNumber());
+                        edtAddress.setText(address.getAddress());
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        fullName = edtFullname.getText().toString();
+        phoneNumber = edtPhoneNumber.getText().toString();
+        address = edtAddress.getText().toString();
+        payment = spnPayment.getSelectedItem().toString();
+        orderingMethod = spnOrder.getSelectedItem().toString();
+
+        //event ordering method
+        spnOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(adapterView.getSelectedItem().toString().equals("in-store dining")){
+                    tvaddress.setVisibility(View.GONE);
+                    edtAddress.setVisibility(View.GONE);
+                }else{
+                    tvaddress.setVisibility(View.VISIBLE);
+                    edtAddress.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        tvPriceSheet.setText(numberFormat.format(totalPrice) + " VND");
+
+        //show cart
+        refe = FirebaseDatabase.getInstance().getReference("cart").child(user.getUid());
+        refe.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                cartList.clear();
+                for(DataSnapshot data: snapshot.getChildren()){
+                    Cart cart = data.getValue(Cart.class);
+                    cartList.add(cart);
+                    String tmp = "- "+cart.getFoodName()+" ("+ numberFormat.format(cart.getSubPrice())+") - Quantity: "+cart.getQuantity();
+                    tvCartSheet.setText(tvCartSheet.getText().toString()+tmp+"\n");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void eventListenerSheet() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 }

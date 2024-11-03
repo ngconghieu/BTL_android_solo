@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order details"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textColor="#ff7622"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/tv_price_order_sheet"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:singleLine="false"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:textColor="#009688"
+        android:id="@+id/tv_details_cart_sheet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment"
+        android:textColor="#888"
+        android:textSize="16sp"
+        android:layout_marginTop="12dp"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_marginTop="6dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spn_payment_order_sheet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fullname (*)"
+        android:textSize="16sp"
+        android:textColor="#888"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:background="@drawable/custom_sheet_edt"
+        android:layout_marginTop="6sp"
+        android:id="@+id/edt_fullname_order_sheet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone number(*)"
+        android:textSize="16sp"
+        android:textColor="#888"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="6sp"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:background="@drawable/custom_sheet_edt"
+        android:id="@+id/edt_phone_number_order_sheet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ordering method"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6sp"
+        android:id="@+id/spn_order_method_sheet"/>
+    <TextView
+        android:id="@+id/tvaddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:textSize="16sp"
+        android:textColor="#888"
+        android:layout_marginTop="10dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="6dp"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:background="@drawable/custom_sheet_edt"
+        android:id="@+id/edt_address_order_sheet"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_marginStart="10dp"
+            android:id="@+id/btn_cancel_order_sheet"
+            android:background="@drawable/custom_app_btn"
+            android:backgroundTint="#bbb"
+            android:textSize="16sp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginEnd="10dp"
+            android:text="Order"
+            android:id="@+id/btn_order_sheet"
+            android:background="@drawable/custom_app_btn"/>
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>

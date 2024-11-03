@@ -26,6 +26,8 @@ import com.example.project.Object.Food;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -138,6 +140,7 @@ String foodNameAll;
     int numberSheet, priceOrigin=0, priceChange;
     NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
     String imgFood;
+    FirebaseUser user;
 
     private void sheetOpen() {
         View v = getLayoutInflater().inflate(R.layout.layout_bottomsheet, null);
@@ -187,25 +190,21 @@ String foodNameAll;
         btnAddToCartSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference refCart = FirebaseDatabase.getInstance().getReference("cart");
-                refCart.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        DatabaseReference r = refCart.child("cart"+snapshot.getChildrenCount()).child(foodNameAll);
-                        r.child("foodName").setValue(foodNameAll);
-                        r.child("quantity").setValue(numberSheet);
-                        r.child("subTotal").setValue(priceChange);
-                        Toast.makeText(FoodDetailsActivity.this, "Add food successfully", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-                bottomSheetDialog.dismiss();
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                DatabaseReference refCart = FirebaseDatabase.getInstance()
+                        .getReference("cart").child(user.getUid()).child(foodNameAll);
+                Cart cart = new Cart(priceChange,numberSheet,foodNameAll);
+                refCart.setValue(cart);
+                Toast.makeText(FoodDetailsActivity.this, "Added", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
+    }
+
+    private void updateDatabase(String name,int num, int sub){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cart");
+        ref.child(user.getUid()).child(name).child("quantity").setValue(num);
+        ref.child(user.getUid()).child(name).child("subPrice").setValue(sub);
     }
 
     private void loadSheet() {

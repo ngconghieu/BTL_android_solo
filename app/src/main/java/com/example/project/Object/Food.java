@@ -78,17 +78,6 @@ public class Food {
         this.imageFood = imageFood;
     }
 
-    @Override
-    public String toString() {
-        return "Food{" +
-                "foodName='" + foodName + '\'' +
-                ", details='" + details + '\'' +
-                ", price=" + price +
-                ", discount=" + discount +
-                ", imageFood=" + imageFood +
-                '}';
-    }
-
     private List<String> imageFood;
 
 }
