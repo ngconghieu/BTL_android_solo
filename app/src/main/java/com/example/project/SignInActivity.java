@@ -38,7 +38,6 @@ public class SignInActivity extends AppCompatActivity {
     private ImageView imgvHideIcon;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
-    private FrameLayout layoutForgot;
     private AlertDialog alertDialog;
 
     @Override
@@ -71,6 +70,7 @@ public class SignInActivity extends AppCompatActivity {
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setMessage("Signing in...");
                 progressDialog.show();
                 String email = edtEmail.getText().toString().trim(),
                     password = edtPassword.getText().toString().trim();
@@ -108,6 +108,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //tao alertDialog send email
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
 
                 View dialogView = getLayoutInflater()
@@ -179,7 +180,6 @@ public class SignInActivity extends AppCompatActivity {
         btnSignin = findViewById(R.id.btn_signin);
         tvSignup = findViewById(R.id.tv_signup);
         imgvHideIcon = findViewById(R.id.imgv_hide_icon);
-        layoutForgot = findViewById(R.id.layout_forgot);
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(SignInActivity.this);
 

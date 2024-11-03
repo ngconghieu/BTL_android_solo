@@ -159,7 +159,8 @@ public class AddFoodActivity extends AppCompatActivity {
                     AtomicInteger uploadCount = new AtomicInteger(uri.size());// ==cnt
 
                     for (Uri data : uri) {
-                        StorageReference ew = storageRef.child(foodName + "/" + System.currentTimeMillis());
+                        int a = (Integer.parseInt(uploadCount.toString().trim())-1);
+                        StorageReference ew = storageRef.child(foodName + "/" + a);
                         ew.putFile(data) //put img
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override

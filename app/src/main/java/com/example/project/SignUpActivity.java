@@ -40,7 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 public class SignUpActivity extends AppCompatActivity {
 
     private String email, password, reTypePassword, userCode;
-    private EditText edtEmai, edtPassword, edtReTypePassword,
+    private EditText edtEmail, edtPassword, edtReTypePassword,
                     edtUserCode;
     private ImageView imgvHideIcon, imgvHideIcon1;
     private Button btnSignup;
@@ -94,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-                email = edtEmai.getText().toString().trim();
+                email = edtEmail.getText().toString().trim();
                 password = edtPassword.getText().toString().trim();
                 reTypePassword = edtReTypePassword.getText().toString().trim();
                 userCode = edtUserCode.getText().toString().trim();
@@ -104,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     return;
                 }
-                //check emai password
+                //check email password
                 if(InputValidate.isValidEmail(email) && InputValidate.isValidPassword(password)){
                     mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(email,password)
@@ -175,7 +175,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        edtEmai = findViewById(R.id.edt_email);
+        edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         edtReTypePassword = findViewById(R.id.edt_retype_password);
         edtUserCode = findViewById(R.id.edt_usercode);
@@ -184,7 +184,7 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignup = findViewById(R.id.btn_signup);
         database = FirebaseDatabase.getInstance();
         progressDialog = new ProgressDialog(this);
-
+        progressDialog.setMessage("Signing up...");
 
     }
 }

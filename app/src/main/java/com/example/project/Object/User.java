@@ -1,22 +1,22 @@
 package com.example.project.Object;
 
 public class User {
-    private String emai, password, role;
+    private String email, password, role;
 
     public String getEmai() {
-        return emai;
+        return email;
     }
 
-    public void setEmai(String emai) {
-        this.emai = emai;
+    public void setEmai(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public User(String emai, String role) {
-        this.emai = emai;
+    public User(String email, String role) {
+        this.email = email;
         this.role = role;
     }
 
@@ -35,8 +35,8 @@ public class User {
     public User() {
     }
 
-    public User(String emai, String password, String role) {
-        this.emai = emai;
+    public User(String email, String password, String role) {
+        this.email = email;
         this.password = password;
         this.role = role;
     }
@@ -44,7 +44,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "emai='" + emai + '\'' +
+                "email='" + email + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }

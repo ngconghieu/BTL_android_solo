@@ -35,7 +35,6 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager_food"
                 android:layout_width="match_parent"
-                android:background="@color/black"
                 android:layout_height="200dp" />
             <me.relex.circleindicator.CircleIndicator3
                 android:id="@+id/circle_indicator"
@@ -46,12 +45,14 @@
                 android:layout_height="10dp"/>
 
             <TextView
+                android:id="@+id/tvallfoodonlytext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All Foods"
                 android:textStyle="bold"
+                android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="#ff7622"/>
 
             <androidx.recyclerview.widget.RecyclerView

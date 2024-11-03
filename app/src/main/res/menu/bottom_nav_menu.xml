@@ -10,6 +10,6 @@
         android:title="History"
         android:icon="@drawable/ic_home_history"/>
     <item android:id="@+id/profile"
-        android:title="Profile"
+        android:title="Account"
         android:icon="@drawable/ic_home_profile"/>
 </menu>

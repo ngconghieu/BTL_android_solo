@@ -85,12 +85,22 @@ public class AccountFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         initUI(view);
         setInfoUser();
-        MenuAccountFragment maf = new MenuAccountFragment();
-        getParentFragmentManager().beginTransaction()
-            .replace(R.id.layout_menu_account, maf)
-            .commit();
+        loadData();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
+
+    private void loadData() {
+        MenuAccountFragment maf = new MenuAccountFragment();
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.layout_menu_account, maf)
+                .commit();
     }
 
     private void initUI(View view) {

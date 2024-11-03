@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.project.Adapter.AllFoodAdapter;
 import com.example.project.Adapter.ViewPagerHomeAdapter;
@@ -88,6 +90,8 @@ public class HomeFragment extends Fragment {
     private ViewPagerHomeAdapter viewPagerHomeAdapter;
     private RecyclerView rcvAllFood;
     private AllFoodAdapter adapter;
+    private TextView allfoodtextonly;
+    private EditText edtSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,6 +111,8 @@ public class HomeFragment extends Fragment {
 
 
     private void initUI(View v) {
+        edtSearch = v.findViewById(R.id.edt_search);
+        allfoodtextonly = v.findViewById(R.id.tvallfoodonlytext);
         viewPager2 = v.findViewById(R.id.view_pager_food);
         circleIndicator3 = v.findViewById(R.id.circle_indicator);
         viewPagerHomeAdapter = new ViewPagerHomeAdapter();
@@ -164,7 +170,6 @@ public class HomeFragment extends Fragment {
 
     private void getData() {
         listImage = new ArrayList<>();
-        if(listImage==null) return;
         ref = FirebaseDatabase.getInstance().getReference("foods");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -172,7 +177,17 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot data:snapshot.getChildren()){
                     Food food = data.getValue(Food.class);
                     listImage.add(food);
-                }viewPagerHomeAdapter.setData(listImage);
+                }
+                if(listImage.isEmpty()) {
+                    allfoodtextonly.setTextSize(26);
+                    allfoodtextonly.setText("We're out of food for now");
+                    edtSearch.setVisibility(View.GONE);
+                }else{
+                    allfoodtextonly.setTextSize(16);
+                    allfoodtextonly.setText("All Foods");
+                    edtSearch.setVisibility(View.VISIBLE);
+                }
+                viewPagerHomeAdapter.setData(listImage);
             }
 
             @Override
