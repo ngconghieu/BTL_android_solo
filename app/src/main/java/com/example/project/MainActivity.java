@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if(id==R.id.home) viewPager2.setCurrentItem(0);
                 else if(id==R.id.cart) viewPager2.setCurrentItem(1);
-                else if(id==R.id.history) viewPager2.setCurrentItem(2);
+                else if(id==R.id.order) viewPager2.setCurrentItem(2);
                 else viewPager2.setCurrentItem(3);
                 return true;
             }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         bottom_nav.setSelectedItemId(R.id.cart);
                         break;
                     case 2:
-                        bottom_nav.setSelectedItemId(R.id.history);
+                        bottom_nav.setSelectedItemId(R.id.order);
                         break;
                     case 3:
                         bottom_nav.setSelectedItemId(R.id.profile);
