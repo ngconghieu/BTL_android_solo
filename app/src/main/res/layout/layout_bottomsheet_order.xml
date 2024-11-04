@@ -129,6 +129,8 @@
             android:text="Cancel"
             android:layout_marginStart="10dp"
             android:id="@+id/btn_cancel_order_sheet"
+            android:textStyle="bold"
+            android:textColor="#fff"
             android:background="@drawable/custom_app_btn"
             android:backgroundTint="#bbb"
             android:textSize="16sp"/>
@@ -143,6 +145,8 @@
             android:textSize="16sp"
             android:layout_marginEnd="10dp"
             android:text="Order"
+            android:textStyle="bold"
+            android:textColor="#fff"
             android:id="@+id/btn_order_sheet"
             android:background="@drawable/custom_app_btn"/>
     </LinearLayout>

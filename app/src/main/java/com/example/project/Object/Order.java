@@ -72,7 +72,8 @@ public class Order {
         this.address = address;
     }
 
-    public Order(String orderId, String payment, String orderingMethod, String orderTime, String state, int totalPrice, List<Cart> cart, Address address) {
+    public Order(String orderId, String payment, String orderingMethod, String orderTime,
+                 String state, int totalPrice, List<Cart> cart, Address address) {
         this.orderId = orderId;
         this.payment = payment;
         this.orderingMethod = orderingMethod;

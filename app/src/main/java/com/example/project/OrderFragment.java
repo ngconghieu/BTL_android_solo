@@ -27,6 +27,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,8 +101,12 @@ public class OrderFragment extends Fragment {
                 orderList.clear();
                 for(DataSnapshot data:snapshot.getChildren()){
                     Order order = data.getValue(Order.class);
-                    orderList.add(order);
-                }adapter.setData(orderList);
+                    if(order !=null) {
+                        orderList.add(order);
+                    }
+                }
+                Collections.reverse(orderList);
+                adapter.setData(orderList);
             }
 
             @Override

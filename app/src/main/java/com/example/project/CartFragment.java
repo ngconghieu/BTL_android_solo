@@ -328,7 +328,7 @@ public class CartFragment extends Fragment {
                             if (orderingMethod.equals("in-store dining")) adr.setAddress("");
                             Order order = new Order(tmp, payment, orderingMethod, currentDateTime, "Pending", totalPrice, cartList, adr);
 
-                            refOrder.setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            refOrder.child(tmp).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {

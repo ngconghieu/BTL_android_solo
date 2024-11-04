@@ -154,11 +154,11 @@ public class HomeFragment extends Fragment {
     private void getData() {
         progressDialog.show();
         List<Food> listFood = new ArrayList<>();
-        if (listFood ==null) return;
         ref = FirebaseDatabase.getInstance().getReference("foods");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listFood.clear();
                 for(DataSnapshot data:snapshot.getChildren()){
                     Food food = data.getValue(Food.class);
                     listFood.add(food);

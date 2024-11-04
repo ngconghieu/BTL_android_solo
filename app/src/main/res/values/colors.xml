@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="orange">#ff7622</color>
+    <color name="text_system">#bbbbbb</color>
+    <color name="confirm">#8DE7E742</color>
+    <color name="complete">#9D96D34F</color>
+    <color name="reject">#8CDE3636</color>
 </resources>
