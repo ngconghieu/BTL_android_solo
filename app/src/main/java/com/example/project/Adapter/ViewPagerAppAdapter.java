@@ -7,8 +7,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.project.AccountFragment;
 import com.example.project.CartFragment;
-import com.example.project.HistoryFragment;
 import com.example.project.HomeFragment;
+import com.example.project.OrderFragment;
 
 public class ViewPagerAppAdapter extends FragmentStateAdapter {
     public ViewPagerAppAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -24,7 +24,7 @@ public class ViewPagerAppAdapter extends FragmentStateAdapter {
             case 1:
                 return new CartFragment();
             case 2:
-                return new HistoryFragment();
+                return new OrderFragment();
             case 3:
                 return new AccountFragment();
             default:

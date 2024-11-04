@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -13,8 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.example.project.Adapter.OrderAdapter;
 import com.example.project.Object.Food;
+import com.example.project.Object.Order;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,12 +26,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HistoryFragment#newInstance} factory method to
+ * Use the {@link OrderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HistoryFragment extends Fragment {
+public class OrderFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +45,7 @@ public class HistoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public HistoryFragment() {
+    public OrderFragment() {
         // Required empty public constructor
     }
 
@@ -49,11 +55,11 @@ public class HistoryFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HistoryFragment.
+     * @return A new instance of fragment OrderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HistoryFragment newInstance(String param1, String param2) {
-        HistoryFragment fragment = new HistoryFragment();
+    public static OrderFragment newInstance(String param1, String param2) {
+        OrderFragment fragment = new OrderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,39 +76,31 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-    private ImageView imgvTest;
-    private Button btnTest;
-    private TextView tvTest;
+    private RecyclerView rcvOrder;
+    private OrderAdapter adapter;
     private DatabaseReference ref;
-    private StorageReference storageRef;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         initUI(view);
-        eventListener();
         loadData();
+        eventListener();
         return view;
     }
 
     private void loadData() {
+        List<Order> orderList = new ArrayList<>();
+        ref = FirebaseDatabase.getInstance().getReference("order");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                orderList.clear();
                 for(DataSnapshot data:snapshot.getChildren()){
-                    Food food = data.getValue(Food.class);
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(int i= 0;i<food.getImageFood().size();i++){
-
-                            }
-                        }
-                    },3000);
-
-                }
+                    Order order = data.getValue(Order.class);
+                    orderList.add(order);
+                }adapter.setData(orderList);
             }
 
             @Override
@@ -116,11 +114,10 @@ public class HistoryFragment extends Fragment {
     }
 
     private void initUI(View v) {
-        imgvTest = v.findViewById(R.id.imgv_test);
-        tvTest = v.findViewById(R.id.tv_test);
-        btnTest = v.findViewById(R.id.btn_test);
-        storageRef = FirebaseStorage.getInstance().getReference();
-        ref = FirebaseDatabase.getInstance().getReference("foods");
+        rcvOrder = v.findViewById(R.id.rcv_order);
+        rcvOrder.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapter = new OrderAdapter();
+        rcvOrder.setAdapter(adapter);
 
     }
 }
