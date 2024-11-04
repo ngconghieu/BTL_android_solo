@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,9 @@ import android.widget.Toast;
 import com.example.project.Adapter.CartAdapter;
 import com.example.project.Object.Address;
 import com.example.project.Object.Cart;
+import com.example.project.Object.Order;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -90,12 +94,13 @@ public class CartFragment extends Fragment {
     BottomSheetDialog bottomSheetDialog;
     private RecyclerView rcvCart;
     private Button btn_order;
-    private TextView tvPrice;
+    private TextView tvPrice, tvEmpty;
     private CartAdapter adapter;
     DatabaseReference ref;
     FirebaseUser user;
     private int totalPrice;
     NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,6 +120,7 @@ public class CartFragment extends Fragment {
     }
 
     private void loadData() {
+        progressDialog.show();
         List<Cart> list = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("cart").child(user.getUid());
         ref.addValueEventListener(new ValueEventListener() {
@@ -127,8 +133,12 @@ public class CartFragment extends Fragment {
                     list.add(cart);
                     totalPrice += cart.getSubPrice();
                 }
+                if (list.isEmpty()) {
+                    tvEmpty.setVisibility(View.VISIBLE);
+                } else tvEmpty.setVisibility(View.GONE);
                 adapter.setData(list);
                 tvPrice.setText(numberFormat.format(totalPrice) + " VND");
+                progressDialog.dismiss();
             }
 
             @Override
@@ -152,6 +162,9 @@ public class CartFragment extends Fragment {
     }
 
     private void initUI(View v) {
+        tvEmpty = v.findViewById(R.id.tvempty);
+        progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setMessage("Loading...");
         btn_order = v.findViewById(R.id.btn_order);
         NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
         adapter = new CartAdapter();
@@ -173,7 +186,9 @@ public class CartFragment extends Fragment {
     DatabaseReference refe;
     List<Cart> cartList;
     String currentDateTime;
-    String fullName, address, payment, orderingMethod, phoneNumber;
+    String fullName, address, payment, orderingMethod;
+    String phoneNumber;
+    DatabaseReference addressRef;
 
     private void sheetZone(View v) {
         cartList = new ArrayList<>();
@@ -203,21 +218,24 @@ public class CartFragment extends Fragment {
     }
 
     private void loadSheetData() {
+        progressDialog.show();
+
         //payment
         ArrayAdapter<CharSequence> adap = ArrayAdapter.createFromResource(
                 requireContext(), R.array.payment_method, android.R.layout.simple_spinner_dropdown_item);
         spnPayment.setAdapter(adap);
+
         //ordering
         ArrayAdapter<CharSequence> adap1 = ArrayAdapter.createFromResource(
                 requireContext(), R.array.ordering_method, android.R.layout.simple_spinner_dropdown_item);
         spnOrder.setAdapter(adap1);
 
         // Load address if avail
-        DatabaseReference addressRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+        addressRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
         addressRef.child("address").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot!=null) {
+                if (snapshot.exists()) {
                     Address address = snapshot.getValue(Address.class);
                     if (address != null) {
                         edtFullname.setText(address.getUserName());
@@ -225,29 +243,28 @@ public class CartFragment extends Fragment {
                         edtAddress.setText(address.getAddress());
                     }
                 }
+                progressDialog.dismiss();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                progressDialog.dismiss();
             }
         });
-        fullName = edtFullname.getText().toString();
-        phoneNumber = edtPhoneNumber.getText().toString();
-        address = edtAddress.getText().toString();
-        payment = spnPayment.getSelectedItem().toString();
-        orderingMethod = spnOrder.getSelectedItem().toString();
 
         //event ordering method
         spnOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(adapterView.getSelectedItem().toString().equals("in-store dining")){
+                if (adapterView.getSelectedItem().toString().equals("in-store dining")) {
                     tvaddress.setVisibility(View.GONE);
                     edtAddress.setVisibility(View.GONE);
-                }else{
+                } else {
                     tvaddress.setVisibility(View.VISIBLE);
                     edtAddress.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
@@ -261,19 +278,24 @@ public class CartFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 cartList.clear();
-                for(DataSnapshot data: snapshot.getChildren()){
+                StringBuilder cartText = new StringBuilder();
+                for (DataSnapshot data : snapshot.getChildren()) {
                     Cart cart = data.getValue(Cart.class);
-                    cartList.add(cart);
-                    String tmp = "- "+cart.getFoodName()+" ("+ numberFormat.format(cart.getSubPrice())+") - Quantity: "+cart.getQuantity();
-                    tvCartSheet.setText(tvCartSheet.getText().toString()+tmp+"\n");
+                    if (cart != null) {
+                        cartList.add(cart);
+                        String tmp = "- " + cart.getFoodName() + " (" + numberFormat.format(cart.getSubPrice()) + ") - Quantity: " + cart.getQuantity();
+                        cartText.append(tmp).append("\n");
+                    }
                 }
+                tvCartSheet.setText(cartText.toString());
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
+
     private void eventListenerSheet() {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,7 +307,58 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                fullName = edtFullname.getText().toString().trim();
+                phoneNumber = edtPhoneNumber.getText().toString().trim();
+                address = edtAddress.getText().toString().trim();
+                payment = spnPayment.getSelectedItem().toString();
+                orderingMethod = spnOrder.getSelectedItem().toString();
+
+                if (fullName.isEmpty()) edtFullname.setError("required");
+                else if (phoneNumber.isEmpty()) edtPhoneNumber.setError("required");
+                else if (orderingMethod.equals("delivery") && address.isEmpty()) edtAddress.setError("required");
+                else {
+                    progressDialog.show();
+                    DatabaseReference refOrder = FirebaseDatabase.getInstance().getReference("order");
+                    refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String tmp = "order" + snapshot.getChildrenCount();
+                            Address adr = new Address(fullName, address, phoneNumber);
+                            addressRef.child("address").setValue(adr);
+                            if (orderingMethod.equals("in-store dining")) adr.setAddress("");
+                            Order order = new Order(tmp, payment, orderingMethod, currentDateTime, "Pending", totalPrice, cartList, adr);
+
+                            refOrder.setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        refe = FirebaseDatabase.getInstance().getReference("cart");
+                                        refe.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(requireContext(), "Order successfully", Toast.LENGTH_SHORT).show();
+                                                    bottomSheetDialog.dismiss();
+                                                } else
+                                                    Toast.makeText(requireContext(), "There're unknown error founded", Toast.LENGTH_SHORT).show();
+                                                progressDialog.dismiss();
+                                            }
+                                        });
+                                    } else {
+                                        progressDialog.dismiss();
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            progressDialog.dismiss();
+                        }
+                    });
+                }
             }
         });
     }
+
 }

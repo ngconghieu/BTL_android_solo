@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -67,19 +68,21 @@ public class AddressAccountFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }//loadData();
+        }
     }
     private EditText edtUsername, edtPhoneNumber, edtAddress;
     private Button btnConfirm;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private String userName, address, phoneNumber;
+    private ProgressDialog progressDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_address_account, container, false);
         initUI(view);
+        loadData();
         eventListener();
         return view;
     }
@@ -121,6 +124,8 @@ public class AddressAccountFragment extends Fragment {
     }
 
     private void initUI(View v) {
+        progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setMessage("Loading...");
         edtUsername = v.findViewById(R.id.edt_username);
         edtPhoneNumber = v.findViewById(R.id.edt_phone_number);
         edtAddress = v.findViewById(R.id.edt_address);
@@ -129,6 +134,7 @@ public class AddressAccountFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
     }
     private void loadData(){
+        progressDialog.show();
         FirebaseUser user = mAuth.getCurrentUser();
         DatabaseReference ref = database.getReference("users").child(user.getUid()); // Lấy reference đến node của user hiện tại
 
@@ -141,7 +147,7 @@ public class AddressAccountFragment extends Fragment {
                     edtAddress.setText(mAddress.getAddress());
                     edtUsername.setText(mAddress.getUserName());
                     edtPhoneNumber.setText(mAddress.getPhoneNumber());
-                }
+                }progressDialog.dismiss();
             }
 
             @Override

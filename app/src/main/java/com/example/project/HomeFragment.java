@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -80,7 +81,6 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getData();
-        getDataForAllFood();
     }
 
     private ViewPager2 viewPager2;
@@ -92,6 +92,7 @@ public class HomeFragment extends Fragment {
     private AllFoodAdapter adapter;
     private TextView allfoodtextonly;
     private EditText edtSearch;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +102,6 @@ public class HomeFragment extends Fragment {
         initUI(view);
         eventListener();
         getData();
-        getDataForAllFood();
         return view;
     }
 
@@ -111,6 +111,8 @@ public class HomeFragment extends Fragment {
 
 
     private void initUI(View v) {
+        progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setMessage("Loading...");
         edtSearch = v.findViewById(R.id.edt_search);
         allfoodtextonly = v.findViewById(R.id.tvallfoodonlytext);
         viewPager2 = v.findViewById(R.id.view_pager_food);
@@ -147,7 +149,10 @@ public class HomeFragment extends Fragment {
         rcvAllFood.setLayoutManager(new GridLayoutManager(requireContext(),2));
 
     }
-    private void getDataForAllFood() {
+
+
+    private void getData() {
+        progressDialog.show();
         List<Food> listFood = new ArrayList<>();
         if (listFood ==null) return;
         ref = FirebaseDatabase.getInstance().getReference("foods");
@@ -165,10 +170,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-    }
-
-
-    private void getData() {
         listImage = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("foods");
         ref.addValueEventListener(new ValueEventListener() {
@@ -188,6 +189,7 @@ public class HomeFragment extends Fragment {
                     edtSearch.setVisibility(View.VISIBLE);
                 }
                 viewPagerHomeAdapter.setData(listImage);
+                progressDialog.dismiss();
             }
 
             @Override

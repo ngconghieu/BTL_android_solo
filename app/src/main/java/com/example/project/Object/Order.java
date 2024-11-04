@@ -1,22 +1,12 @@
 package com.example.project.Object;
 
-public class Order {
-    private String orderId, username, payment, orderingMethod, orderTime, state;
-    private int TotalPrice;
-    private int phoneNumber;
-    private Cart cart;
+import java.util.List;
 
-    public Order(String orderId, String username, String payment, String orderingMethod, String orderTime, String state, int totalPrice, int phoneNumber, Cart cart) {
-        this.orderId = orderId;
-        this.username = username;
-        this.payment = payment;
-        this.orderingMethod = orderingMethod;
-        this.orderTime = orderTime;
-        this.state = state;
-        TotalPrice = totalPrice;
-        this.phoneNumber = phoneNumber;
-        this.cart = cart;
-    }
+public class Order {
+    private String orderId, payment, orderingMethod, orderTime, state;
+    private int TotalPrice;
+    private List<Cart> cart;
+    Address address;
 
     public String getOrderId() {
         return orderId;
@@ -24,14 +14,6 @@ public class Order {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPayment() {
@@ -74,20 +56,31 @@ public class Order {
         TotalPrice = totalPrice;
     }
 
-    public int getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Cart getCart() {
+    public List<Cart> getCart() {
         return cart;
     }
 
-    public void setCart(Cart cart) {
+    public void setCart(List<Cart> cart) {
         this.cart = cart;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Order(String orderId, String payment, String orderingMethod, String orderTime, String state, int totalPrice, List<Cart> cart, Address address) {
+        this.orderId = orderId;
+        this.payment = payment;
+        this.orderingMethod = orderingMethod;
+        this.orderTime = orderTime;
+        this.state = state;
+        TotalPrice = totalPrice;
+        this.cart = cart;
+        this.address = address;
     }
 
     public Order() {

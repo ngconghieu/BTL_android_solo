@@ -28,6 +28,15 @@
             android:textColor="@color/white"/>
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Cart is empty"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:visibility="gone"
+        android:textColor="#ff7622"
+        android:id="@+id/tvempty"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_cart"
         android:layout_width="match_parent"
