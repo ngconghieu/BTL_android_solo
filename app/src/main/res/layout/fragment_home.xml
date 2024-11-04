@@ -36,14 +36,6 @@
                 android:id="@+id/view_pager_food"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
-            <me.relex.circleindicator.CircleIndicator3
-                android:id="@+id/circle_indicator"
-                android:layout_width="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                app:ci_drawable="@drawable/custom_home_indicator"
-                android:layout_height="10dp"/>
-
             <TextView
                 android:id="@+id/tvallfoodonlytext"
                 android:layout_width="wrap_content"
@@ -51,7 +43,7 @@
                 android:text="All Foods"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:textSize="16sp"
                 android:textColor="#ff7622"/>
 
@@ -66,11 +58,6 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/edt_search"
-        android:visibility="gone"/>
 
 
 

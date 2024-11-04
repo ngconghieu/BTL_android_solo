@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.example.project.Adapter.OrderAdapter;
 import com.example.project.Object.Food;
 import com.example.project.Object.Order;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -81,6 +83,7 @@ public class OrderFragment extends Fragment {
     private RecyclerView rcvOrder;
     private OrderAdapter adapter;
     private DatabaseReference ref;
+    private String currentUserId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,8 +94,26 @@ public class OrderFragment extends Fragment {
         eventListener();
         return view;
     }
-
     private void loadData() {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("role");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String role = snapshot.getValue(String.class);
+                currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                loadOrderData(role);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+
+    private void loadOrderData(String role) {
         List<Order> orderList = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("order");
         ref.addValueEventListener(new ValueEventListener() {
@@ -102,7 +123,8 @@ public class OrderFragment extends Fragment {
                 for(DataSnapshot data:snapshot.getChildren()){
                     Order order = data.getValue(Order.class);
                     if(order !=null) {
-                        orderList.add(order);
+                        if("admin".equals(role) || currentUserId.equals(order.getUserId()))
+                            orderList.add(order);
                     }
                 }
                 Collections.reverse(orderList);

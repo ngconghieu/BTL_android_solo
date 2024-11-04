@@ -42,6 +42,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
     }
 
     List<Order> orderList = new ArrayList<>();
+    private String role;
 
     public void setData(List<Order> mList) {
         orderList = mList;
@@ -63,6 +64,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Order order = orderList.get(position);
         if (order == null) return;
+
         holder.tvOrderId.setText(order.getOrderId());
         holder.tvOrdering.setText(order.getOrderingMethod());
         holder.tvDate.setText(order.getOrderTime());
@@ -96,6 +98,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
         holder.btnCompleted.setVisibility(View.GONE);
         holder.btnCompleted.setEnabled(false);
 
+
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference refUsers = FirebaseDatabase.getInstance()
                 .getReference("users")
@@ -105,7 +109,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
         refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String role = snapshot.getValue(String.class);
+                role = snapshot.getValue(String.class);
                 boolean isAdmin = "admin".equals(role);
 
                 DatabaseReference refState = FirebaseDatabase.getInstance()
@@ -251,7 +255,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
             holder.btnCompleted.setVisibility(state.equals(OrderState.COMPLETED) ? View.VISIBLE : View.GONE);
             holder.btnCompleted.setEnabled(false);
 
-            // Thêm background color cho khách hàng
+
             switch (state) {
                 case OrderState.CONFIRMED:
                     holder.layoutOrder.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.confirm));

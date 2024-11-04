@@ -189,6 +189,7 @@ public class CartFragment extends Fragment {
     String fullName, address, payment, orderingMethod;
     String phoneNumber;
     DatabaseReference addressRef;
+    FirebaseUser mUser;
 
     private void sheetZone(View v) {
         cartList = new ArrayList<>();
@@ -202,6 +203,7 @@ public class CartFragment extends Fragment {
         btnCancel = v.findViewById(R.id.btn_cancel_order_sheet);
         spnPayment = v.findViewById(R.id.spn_payment_order_sheet);
         spnOrder = v.findViewById(R.id.spn_order_method_sheet);
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //dateTime
         Calendar calendar = Calendar.getInstance();
@@ -326,7 +328,7 @@ public class CartFragment extends Fragment {
                             Address adr = new Address(fullName, address, phoneNumber);
                             addressRef.child("address").setValue(adr);
                             if (orderingMethod.equals("in-store dining")) adr.setAddress("");
-                            Order order = new Order(tmp, payment, orderingMethod, currentDateTime, "Pending", totalPrice, cartList, adr);
+                            Order order = new Order(tmp, payment, orderingMethod, currentDateTime, "Pending", mUser.getUid() , totalPrice, cartList, adr);
 
                             refOrder.child(tmp).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

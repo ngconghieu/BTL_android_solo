@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.NumberFormat;
@@ -117,20 +118,15 @@ public class ItemFoodManagementAdapter extends RecyclerView.Adapter<ItemFoodMana
                                                 Toast.makeText(holder.itemView.getContext(), "Succeed", Toast.LENGTH_SHORT).show();
                                                 
                                                 //delete from storage
-                                                for(int i = 0; i<food.getImageFood().size();i++) {
-                                                    StorageReference storageRef = FirebaseStorage.getInstance().getReference(food.getFoodName() + "/"+i);
-                                                    storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            Toast.makeText(holder.itemView.getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                                StorageReference storRef = FirebaseStorage.getInstance().getReference(food.getFoodName());
+                                                storRef.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                                                    @Override
+                                                    public void onSuccess(ListResult listResult) {
+                                                        for(StorageReference sRef:listResult.getItems()){
+                                                            sRef.delete();
                                                         }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(holder.itemView.getContext(), "delete from storage failed", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                }
+                                                    }
+                                                });
                                             }
                                         }
                                     });

@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,8 +85,8 @@ public class HomeFragment extends Fragment {
         getData();
     }
 
+    private List<Food> listFood;
     private ViewPager2 viewPager2;
-    private CircleIndicator3 circleIndicator3;
     private List<Food> listImage;
     private DatabaseReference ref;
     private ViewPagerHomeAdapter viewPagerHomeAdapter;
@@ -93,6 +95,7 @@ public class HomeFragment extends Fragment {
     private TextView allfoodtextonly;
     private EditText edtSearch;
     private ProgressDialog progressDialog;
+    private List<Food> filteredFoodList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +109,39 @@ public class HomeFragment extends Fragment {
     }
 
     private void eventListener() {
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                filterFoodList(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void filterFoodList(String query) {
+        filteredFoodList = new ArrayList<>();
+        for (Food food : listFood) {
+            if (food.getFoodName().toLowerCase().contains(query.toLowerCase())) {
+                filteredFoodList.add(food);
+            }
+        }
+        adapter.setData(filteredFoodList);
+        if (query.isEmpty()) {
+            viewPager2.setVisibility(View.VISIBLE);
+            allfoodtextonly.setVisibility(View.VISIBLE);
+        } else {
+            viewPager2.setVisibility(View.GONE);
+            allfoodtextonly.setVisibility(View.GONE);
+        }
     }
 
 
@@ -116,10 +151,9 @@ public class HomeFragment extends Fragment {
         edtSearch = v.findViewById(R.id.edt_search);
         allfoodtextonly = v.findViewById(R.id.tvallfoodonlytext);
         viewPager2 = v.findViewById(R.id.view_pager_food);
-        circleIndicator3 = v.findViewById(R.id.circle_indicator);
         viewPagerHomeAdapter = new ViewPagerHomeAdapter();
         viewPager2.setAdapter(viewPagerHomeAdapter);
-        circleIndicator3.setViewPager(viewPager2);
+        listFood = new ArrayList<>();
 
         //reload viewpager
         Handler mHandler = new Handler();
@@ -153,7 +187,6 @@ public class HomeFragment extends Fragment {
 
     private void getData() {
         progressDialog.show();
-        List<Food> listFood = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("foods");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -162,7 +195,9 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot data:snapshot.getChildren()){
                     Food food = data.getValue(Food.class);
                     listFood.add(food);
-                }adapter.setData(listFood);
+                }
+                filteredFoodList = new ArrayList<>(listFood);
+                adapter.setData(filteredFoodList);
             }
 
             @Override

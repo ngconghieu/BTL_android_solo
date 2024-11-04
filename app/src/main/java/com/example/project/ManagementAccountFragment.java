@@ -88,7 +88,8 @@ public class ManagementAccountFragment extends Fragment {
         btnRevenue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(requireContext(), RevenueActivity.class);
+                startActivity(i);
             }
         });
     }

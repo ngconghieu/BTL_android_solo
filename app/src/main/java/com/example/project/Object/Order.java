@@ -3,7 +3,7 @@ package com.example.project.Object;
 import java.util.List;
 
 public class Order {
-    private String orderId, payment, orderingMethod, orderTime, state;
+    private String orderId, payment, orderingMethod, orderTime, state, userId;
     private int TotalPrice;
     private List<Cart> cart;
     Address address;
@@ -48,6 +48,14 @@ public class Order {
         this.state = state;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public int getTotalPrice() {
         return TotalPrice;
     }
@@ -68,17 +76,23 @@ public class Order {
         return address;
     }
 
+    public Order(String orderId, String orderTime, int totalPrice) {
+        this.orderId = orderId;
+        this.orderTime = orderTime;
+        TotalPrice = totalPrice;
+    }
+
     public void setAddress(Address address) {
         this.address = address;
     }
 
-    public Order(String orderId, String payment, String orderingMethod, String orderTime,
-                 String state, int totalPrice, List<Cart> cart, Address address) {
+    public Order(String orderId, String payment, String orderingMethod, String orderTime, String state, String userId, int totalPrice, List<Cart> cart, Address address) {
         this.orderId = orderId;
         this.payment = payment;
         this.orderingMethod = orderingMethod;
         this.orderTime = orderTime;
         this.state = state;
+        this.userId = userId;
         TotalPrice = totalPrice;
         this.cart = cart;
         this.address = address;

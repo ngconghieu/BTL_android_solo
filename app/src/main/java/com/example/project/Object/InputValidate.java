@@ -13,7 +13,7 @@ public class InputValidate {
 
     public static boolean isValidPassword(String password) {
         // it nhat 8 ky tu, hoa thuong hoac so
-        String passwordRegex = "^[a-zA-Z0-9]{4,8}$";
+        String passwordRegex = "^[a-zA-Z0-9]{6,8}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
